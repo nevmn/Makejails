@@ -1,0 +1,4 @@
+CMD mkdir -p /usr/local/etc/pkg/repos
+COPY poudriere.conf usr/local/etc/pkg/repos/poudriere.conf
+COPY FreeBSD.conf usr/local/etc/pkg/repos/FreeBSD.conf
+MOUNT /usr/local/poudriere/data/packages/151amd64-default /poudriere nullfs ro

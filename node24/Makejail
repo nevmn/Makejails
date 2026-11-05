@@ -1,0 +1,14 @@
+OPTION start
+OPTION overwrite=force
+OPTION mount_devfs
+OPTION tzdata
+OPTION alias
+OPTION ip4_inherit
+OPTION ip6_inherit
+
+INCLUDE ../poudriere.makejail/Makejail
+INCLUDE ../hostuser.makejail/Makejail
+
+PKG node24 npm-node24
+
+STAGE cmd

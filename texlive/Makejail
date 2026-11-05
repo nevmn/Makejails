@@ -2,19 +2,16 @@ OPTION start
 OPTION overwrite=force
 OPTION mount_devfs
 OPTION tzdata
-
 OPTION alias
 OPTION ip4_inherit
 OPTION ip6_inherit
 
+INCLUDE ../poudriere.makejail/Makejail
+INCLUDE ../hostuser.makejail/Makejail
+
 PKG texlive-full
 
-CMD mkdir -p /work
-
-MOUNT /home/maxim/projects/Awesome-CV /work nullfs ro
-MOUNT /usr/local/poudriere/data/packages/151amd64-default /poudriere nullfs ro
-
-COPY poudriere.conf /usr/local/etc/pkg/repos/poudriere.conf
+MOUNT /home/maxim/projects/Awesome-CV /home/maxim/Awesome-CV nullfs rw
 
 STAGE cmd
-WORKDIR /work
+WORKDIR /home/maxim/Awesome-CV
