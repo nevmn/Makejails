@@ -8,10 +8,9 @@ OPTION ip6_inherit
 
 INCLUDE ../poudriere.makejail/Makejail
 INCLUDE ../hostuser.makejail/Makejail
+INCLUDE ../workdir.makejail/Makejail
 
 PKG texlive-full
 
-MOUNT /home/maxim/projects/Awesome-CV /home/maxim/Awesome-CV nullfs rw
-
 STAGE cmd
-WORKDIR /home/maxim/Awesome-CV
+CMD --jexec --huser hostuser --workdir /workdir /bin/sh

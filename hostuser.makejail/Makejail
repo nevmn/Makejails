@@ -1,5 +1,5 @@
 ARG host_uid
 ARG host_gid
 
-CMD pw groupadd host -g ${host_gid}
-CMD pw useradd host -u ${host_uid} -g ${host_gid} -m -s /bin/sh
+CMD pw groupadd hostuser -g ${host_gid}
+CMD pw useradd hostuser -u ${host_uid} -g ${host_gid} -m -s /bin/sh

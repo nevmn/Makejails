@@ -1,0 +1,50 @@
+OPTION start
+OPTION overwrite=force
+OPTION mount_devfs
+OPTION tzdata
+OPTION alias
+OPTION ip4_inherit
+OPTION ip6_inherit
+
+INCLUDE ../poudriere.makejail/Makejail
+
+PKG neovim \
+    git-tiny \
+    nerd-fonts \
+    lazygit \
+    tree-sitter-cli \
+    curl \
+    fzf \
+    ripgrep \
+    fd-find \
+    unzip \
+    wget \
+    bash \
+    go \
+    llvm19 \
+    rust \
+    devel/lua-luarocks \
+    devel/php-composer \
+    npm-node24 \
+    python
+
+CMD cargo install --root /opt/cargo --locked tree-sitter-cli
+ENV PATH="/opt/cargo/bin:${PATH}"
+
+CMD mkdir -p /opt/hostuser/.config/nvim
+CMD git clone https://github.com/LazyVim/starter /opt/hostuser/.config/nvim
+CMD rm -rf /opt/hostuser/.config/nvim/.git
+COPY .config/nvim /opt/hostuser/.config
+
+INCLUDE ../workdir.makejail/Makejail
+
+STAGE cmd
+ARG workdir?
+ARG hostuser
+CMD chown -R ${hostuser} /opt/hostuser
+CMD -jexec --huser "${hostuser}" --workdir /workdir env \
+                                        XDG_CONFIG_HOME=/opt/hostuser/.config \
+                                        XDG_DATA_HOME=/opt/hostuser/.local/share \
+                                        XDG_STATE_HOME=/opt/hostuser/.local/state \
+                                        XDG_CACHE_HOME=/opt/hostuser/.cache \
+                                        nvim

@@ -1,0 +1,9 @@
+STAGE build
+CMD mkdir /workdir
+
+STAGE precmd
+ARG workdir
+MOUNT --nopersist "${workdir}" /workdir nullfs rw
+
+STAGE postcmd
+UMOUNT /workdir

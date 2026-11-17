@@ -7,8 +7,15 @@ OPTION ip4_inherit
 OPTION ip6_inherit
 
 INCLUDE ../poudriere.makejail/Makejail
+INCLUDE ../workdir.makejail/Makejail
 INCLUDE ../hostuser.makejail/Makejail
 
 PKG node24 npm-node24
 
+CMD mkdir /var/cache/npm
+CMD chown -R "${host_uid}:${host_gid}" /var/cache/npm
+CMD --juser hostuser npm config set cache /var/cache/npm
+MOUNT /var/cache/npm /var/cache/npm nullfs rw
+
 STAGE cmd
+CMD --jexec --juser hostuser --workdir /workdir /bin/sh
