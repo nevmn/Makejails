@@ -7,6 +7,8 @@ OPTION ip4_inherit
 OPTION ip6_inherit
 
 INCLUDE ../poudriere.makejail/Makejail
+INCLUDE ../workdir.makejail/Makejail
+INCLUDE ../hostuser.makejail/Makejail
 
 PKG neovim \
     git-tiny \
@@ -31,20 +33,10 @@ PKG neovim \
 CMD cargo install --root /opt/cargo --locked tree-sitter-cli
 ENV PATH="/opt/cargo/bin:${PATH}"
 
-CMD mkdir -p /opt/hostuser/.config/nvim
-CMD git clone https://github.com/LazyVim/starter /opt/hostuser/.config/nvim
-CMD rm -rf /opt/hostuser/.config/nvim/.git
-COPY .config/nvim /opt/hostuser/.config
-
-INCLUDE ../workdir.makejail/Makejail
+CMD mkdir -p /home/hostuser/.config/nvim
+CMD git clone https://github.com/LazyVim/starter /home/hostuser/.config/nvim
+CMD rm -rf /home/hostuser/.config/nvim/.git
+COPY .config/nvim /home/hostuser/.config
 
 STAGE cmd
-ARG workdir?
-ARG hostuser
-CMD chown -R ${hostuser} /opt/hostuser
-CMD -jexec --huser "${hostuser}" --workdir /workdir env \
-                                        XDG_CONFIG_HOME=/opt/hostuser/.config \
-                                        XDG_DATA_HOME=/opt/hostuser/.local/share \
-                                        XDG_STATE_HOME=/opt/hostuser/.local/state \
-                                        XDG_CACHE_HOME=/opt/hostuser/.cache \
-                                        nvim
+CMD --jexec --juser hostuser --workdir /workdir nvim
