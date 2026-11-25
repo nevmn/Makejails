@@ -1,0 +1,25 @@
+OPTION start
+OPTION overwrite=force
+OPTION mount_devfs
+OPTION tzdata
+OPTION virtualnet=:<name> default
+OPTION nat
+
+INCLUDE ../poudriere.makejail/Makejail
+INCLUDE ../workdir.makejail/Makejail
+INCLUDE ../hostuser.makejail/Makejail
+
+PKG php84 php84-extensions nginx
+
+#COPY --verbose usr
+
+CMD ln -s /usr/local/etc/php.ini-production /usr/local/etc/php.ini
+
+SYSRC php_fpm_enable=yes
+SYSRC nginx_enable=yes
+
+SERVICE php_fpm start
+SERVICE nginx   start
+
+STAGE cmd
+CMD --jexec --juser hostuser --workdir /workdir /bin/sh
