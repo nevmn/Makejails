@@ -12,10 +12,8 @@ INCLUDE ../hostuser.makejail/Makejail
 
 PKG node24 npm-node24
 
-CMD mkdir /var/cache/npm
-CMD chown -R "${host_uid}:${host_gid}" /var/cache/npm
-CMD --juser hostuser npm config set cache /var/cache/npm
-MOUNT /var/cache/npm /var/cache/npm nullfs rw
+CMD --jexec --juser hostuser mkdir /home/hostuser/.npm
+MOUNT --nopersist /var/cache/npm /home/hostuser/.npm nullfs rw
 
 STAGE cmd
 CMD --jexec --juser hostuser --workdir /workdir /bin/sh
